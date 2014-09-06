@@ -22,11 +22,8 @@ class ConnectionHandler(object):
         method, path, protocol = self.get_base_header()
         if method == 'CONNECT':
             self.method_connect(path)
-        elif method in ('OPTIONS', 'GET', 'HEAD', 'POST', 'PUT',
-                        'DELETE', 'TRACE'):
+        else:
             self.method_others(method, path, protocol)
-        self.client.close()
-        self.target.close()
 
     def get_base_header(self):
         """Return a tuple of (method, path, protocol) from the recieved
@@ -101,6 +98,8 @@ class ConnectionHandler(object):
                         count = 0
             if count == time_out_max:
                 break
+        self.client.close()
+        self.target.close()
 
 
 def start_server(host='localhost', port=8080, ipv_6=False, timeout=60,
